@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.1.66" />
+      <PackageReference Include="FluentMigrator" Version="7.1.0" />
+      <PackageReference Include="FluentMigrator.Runner" Version="7.1.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
+      <PackageReference Include="Npgsql" Version="9.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Repositories\Scripts\Department\PostgresDepartmentElement.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PostgresDepartmentElement.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Repositories\Scripts\Employees\PostgresEmployeeElement.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PostgresEmployeeElement.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Repositories\Scripts\Passports\PostgresPassportElement.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PostgresPassportElement.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Repositories\Scripts\Department\PostgresDepartmentElement.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PostgresDepartmentElement.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Repositories\Scripts\Employees\PostgresEmployeeElement.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PostgresEmployeeElement.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Repositories\Scripts\Passports\PostgresPassportElement.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PostgresPassportElement.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+</Project>
