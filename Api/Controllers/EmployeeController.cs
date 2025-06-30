@@ -21,10 +21,10 @@ public class EmployeeController : ControllerBase
         return Ok(await _employeeService.CreateAsync(createEmployeeRequest));
     }
     
-    [HttpGet("company/{companyId}")]
-    public async Task<IActionResult> GetCompanyEmployees(int companyId)
+    [HttpGet("~/api/companies/{id}/employees")]
+    public async Task<IActionResult> GetCompanyEmployees(int id)
     {
-        return Ok(await _employeeService.GetCompanyEmployeesAsync(companyId));
+        return Ok(await _employeeService.GetCompanyEmployeesAsync(id));
     }
     
     [HttpDelete("{id}")]

@@ -14,6 +14,7 @@ public class UpdateEmployeeRequest
     [RegularExpression(@"^\+?[0-9]{10,15}$", ErrorMessage = "Телефон должен содержать от 10 до 15 цифр и может начинаться с '+'.")]
     public string? Phone { get; set; }
 
+    [Range(0, int.MaxValue, ErrorMessage = "ID компании не может быть отрицательным.")]
     public int? CompanyId { get; set; }
 
     public int? DepartmentId { get; set; }

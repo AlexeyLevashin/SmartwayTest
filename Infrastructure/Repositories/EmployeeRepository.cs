@@ -90,7 +90,7 @@ public class EmployeeRepository : IEmployeeRepository
         return await _dapperContext.FirstOrDefault<DbEmployee>(queryObject);
     }
 
-    public async Task<List<DbEmployeeDetails>?> GetEmployeesByCompanyIdAsync(int companyId)
+    public async Task<List<DbEmployeeDetails>> GetEmployeesByCompanyIdAsync(int companyId)
     {
         var queryObject = new QueryObject(PostgresEmployeeElement.GetCompanyEmployees, new { companyId = companyId });
         var res = await _dapperContext.ListOrEmpty<DbEmployeeDetails>(queryObject);

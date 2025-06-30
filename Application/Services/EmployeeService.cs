@@ -29,35 +29,33 @@ public class EmployeeService : IEmployeeService
 
     public async Task<CreateEmployeeResponse> CreateAsync(CreateEmployeeRequest createEmployeeRequest)
     {
-        var employee = await _employeeRepository.GetByPhoneAsync(createEmployeeRequest.Phone);
+        var employeeTask = _employeeRepository.GetByPhoneAsync(createEmployeeRequest.Phone);
+        var departmentTask = _departmentRepository.GetByIdAsync(createEmployeeRequest.DepartmentId);
+        var passportTask = _passportRepository.IsPassportExistByNumber(createEmployeeRequest.Passport.Number);
         
-        if (await _departmentRepository.GetByIdAsync(createEmployeeRequest.DepartmentId) is null)
-        {
+        await Task.WhenAll(employeeTask, departmentTask, passportTask);
+        
+        var employee = await employeeTask;
+        var departmentExists = await departmentTask;
+        var isPassportExistByNumber = await passportTask;
+        
+        if (departmentExists is null)
             throw new DepartmentNotFound();
-        }
-        
+
         if (employee is not null)
-        {
             throw new EmployeePhoneIsExist();
-        }
-        
-        var isPassportExistByNumber =
-            await _passportRepository.IsPassportExistByNumber(createEmployeeRequest.Passport.Number);
+
         if (isPassportExistByNumber)
-        {
             throw new PassportWithNumberAlreadyExistException();
-        }
         
+        var employeeCandidate = createEmployeeRequest.Adapt<DbEmployee>();
+        var passportCandidate = createEmployeeRequest.Passport.Adapt<DbPassport>();
+    
         _employeeRepository.BeginTransaction();
-        
         try
         {
-            var employeeCandidate = createEmployeeRequest.Adapt<DbEmployee>();
             var employeeId = await _employeeRepository.CreateAsync(employeeCandidate);
-            
-            var passportCandidate = createEmployeeRequest.Passport.Adapt<DbPassport>();
             passportCandidate.EmployeeId = employeeId;
-            
             await _passportRepository.CreateAsync(passportCandidate);
 
             _employeeRepository.Commit();
@@ -84,53 +82,61 @@ public class EmployeeService : IEmployeeService
 
     public async Task<GetEmployeeResponse> UpdateAsync(UpdateEmployeeRequest updateEmployeeRequest, int id)
     {
-        var dbEmployee = await _employeeRepository.GetByIdAsync(id);
-        var dbPassport = await _passportRepository.GetByEmployeeIdAsync(id);
+        var employeeTask = _employeeRepository.GetByIdAsync(id);
+        var passportTask = _passportRepository.GetByEmployeeIdAsync(id);
+        var departmentId = updateEmployeeRequest.DepartmentId ?? -1;
+        var departmentTask = _departmentRepository.GetByIdAsync(departmentId);
 
-        if (dbEmployee is null)
-        {
-            throw new EmployeeNotFound();
-        }
-        
-        if (updateEmployeeRequest.Phone is not null && await _employeeRepository.GetByPhoneAsync(updateEmployeeRequest.Phone) is not null && !string.Equals(updateEmployeeRequest.Phone, dbEmployee.Phone))
-        {
-            throw new EmployeePhoneIsExist();
-        }
-        
-        if (dbPassport is null)
-        {
-            throw new PassportNotFound();
-        }
-        
-        var dbDepartment = await _departmentRepository.GetByIdAsync(updateEmployeeRequest.DepartmentId ?? dbEmployee.DepartmentId);
-        
-        if (dbDepartment is null)
-        {
-            throw new DepartmentNotFound();
-        }
-        
-        if (updateEmployeeRequest.Passport?.Number is not null && await _passportRepository.IsPassportExistByNumber(updateEmployeeRequest.Passport.Number) && !string.Equals(updateEmployeeRequest.Passport.Number, dbPassport.Number))
-        {
-            throw new PassportWithNumberAlreadyExistException();
-        }
-        
-        var updatedEmployee = updateEmployeeRequest.Adapt(dbEmployee);
+        await Task.WhenAll(employeeTask, passportTask, departmentTask).ConfigureAwait(false);
 
-        var updatedPassport = updateEmployeeRequest.Passport?.Adapt(dbPassport) ?? dbPassport;
+        var dbEmployee = await employeeTask.ConfigureAwait(false);
+        var dbPassport = await passportTask.ConfigureAwait(false);
+        var dbDepartment = await departmentTask.ConfigureAwait(false);
+
+        if (dbEmployee is null) throw new EmployeeNotFound();
+        if (dbPassport is null) throw new PassportNotFound();
+        if (dbDepartment is null) throw new DepartmentNotFound();
+        
+        Task<DbEmployee?> phoneCheckTask = Task.FromResult<DbEmployee?>(null);
+        Task<bool> passportCheckTask = Task.FromResult(false);
+
+        if (updateEmployeeRequest.Phone is not null && 
+            !string.Equals(updateEmployeeRequest.Phone, dbEmployee.Phone, StringComparison.Ordinal))
+        {
+            phoneCheckTask = _employeeRepository.GetByPhoneAsync(updateEmployeeRequest.Phone);
+        }
+
+        if (updateEmployeeRequest.Passport?.Number is not null && 
+            !string.Equals(updateEmployeeRequest.Passport.Number, dbPassport.Number, StringComparison.Ordinal))
+        {
+            passportCheckTask = _passportRepository.IsPassportExistByNumber(updateEmployeeRequest.Passport.Number);
+        }
+
+        await Task.WhenAll(phoneCheckTask, passportCheckTask).ConfigureAwait(false);
+
+        if (await phoneCheckTask.ConfigureAwait(false) is not null) throw new EmployeePhoneIsExist();
+        if (await passportCheckTask.ConfigureAwait(false)) throw new PassportWithNumberAlreadyExistException();
+        
+        var employeeForUpdate = updateEmployeeRequest.Adapt(dbEmployee);
+        var passportForUpdate = updateEmployeeRequest.Passport?.Adapt(dbPassport) ?? dbPassport;
 
         _employeeRepository.BeginTransaction();
-        
         try
         {
-            var updatedDbEmployee = await _employeeRepository.UpdateAsync(updatedEmployee);
-            var updatedDbPassport = await _passportRepository.UpdateByEmployeeIdAsync(updatedPassport);
-            
+            var updatedDbEmployee = await _employeeRepository.UpdateAsync(employeeForUpdate);
+            var updatedDbPassport = await _passportRepository.UpdateByEmployeeIdAsync(passportForUpdate);
+    
             _employeeRepository.Commit();
-
-            var res = updatedDbEmployee.Adapt<GetEmployeeResponse>();
-            res.Passport = updatedDbPassport.Adapt<GetPassportResponse>();
-            res.Department = dbDepartment.Adapt<GetEmployeeDepartmentResponse>();
-            return res;
+            
+            return new GetEmployeeResponse
+            {
+                Id = updatedDbEmployee.Id,
+                Name = updatedDbEmployee.Name,
+                Surname = updatedDbEmployee.Surname,
+                Phone = updatedDbEmployee.Phone,
+                Passport = updatedDbPassport.Adapt<GetPassportResponse>(),
+                Department = dbDepartment.Adapt<GetEmployeeDepartmentResponse>()
+            };
         }
         catch
         {
@@ -142,11 +148,6 @@ public class EmployeeService : IEmployeeService
     public async Task<List<GetEmployeeResponse>> GetCompanyEmployeesAsync(int companyId)
     {
         var employees = await _employeeRepository.GetEmployeesByCompanyIdAsync(companyId);
-        
-        if (employees is null || employees.Count == 0)
-        {
-            throw new CompanyNotFound();
-        }
         
         return employees.Select(e => e.Adapt<GetEmployeeResponse>()).ToList();
     }

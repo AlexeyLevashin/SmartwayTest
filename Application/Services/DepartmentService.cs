@@ -56,11 +56,6 @@ public class DepartmentService : IDepartmentService
         }
         
         var res = await _employeeRepository.GetEmployeesByDepartmentIdAsync(id);
-
-        if (res.Count == 0)
-        {
-            throw new DepartmentIsEmpty();
-        }
         
         return res.Select(e => e.Adapt<GetEmployeeWithPassportResponse>()).ToList();
     }

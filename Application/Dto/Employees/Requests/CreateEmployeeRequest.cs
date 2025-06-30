@@ -18,6 +18,7 @@ public class CreateEmployeeRequest
     public string Phone { get; set; }
 
     [Required(ErrorMessage = "Компания обязательна для заполнения.")]
+    [Range(0, int.MaxValue, ErrorMessage = "ID компании не может быть отрицательным.")]
     public int CompanyId { get; set; }
 
     [Required(ErrorMessage = "Отдел обязателен для заполнения.")]
