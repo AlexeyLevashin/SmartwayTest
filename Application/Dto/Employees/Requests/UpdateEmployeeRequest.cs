@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Application.Dto.Passport.Requests;
+using Application.Dto.Passports.Requests;
 
-namespace Application.Dto.Employee.Requests;
+namespace Application.Dto.Employees.Requests;
 
 public class UpdateEmployeeRequest
 {

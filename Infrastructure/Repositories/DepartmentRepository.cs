@@ -2,7 +2,8 @@
 using DataAccess.Dapper.Interfaces;
 using Domain.DbModels;
 using Domain.Interfaces;
-using Infrastructure.Repositories.Scripts.Department;
+using Infrastructure.Repositories.Scripts.Departments;
+
 
 namespace Infrastructure.Repositories;
 

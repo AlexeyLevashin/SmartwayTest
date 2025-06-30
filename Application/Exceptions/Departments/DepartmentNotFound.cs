@@ -2,7 +2,4 @@
 
 namespace Application.Exceptions.Departments;
 
-public class DepartmentNotFound : NotFoundException
-{
-    public DepartmentNotFound(string? message = "Отдел не найден") : base(message) { }
-}
+public class DepartmentNotFound(string? message = "Отдел не найден") : NotFoundException(message);

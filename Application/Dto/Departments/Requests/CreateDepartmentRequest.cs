@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Application.Dto.Department.Requests;
+namespace Application.Dto.Departments.Requests;
 
 public class CreateDepartmentRequest
 {

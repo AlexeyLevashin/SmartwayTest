@@ -17,8 +17,8 @@ public static class InfrastructureExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services)
     {
-        // services.AddScoped<IEmployeesRepository, EmployeesRepository>();
-        // services.AddScoped<IPassportsRepository, PassportsRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<IPassportRepository, PassportRepository>();
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         return services;
     }

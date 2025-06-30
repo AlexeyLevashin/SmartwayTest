@@ -86,6 +86,17 @@ namespace Infrastructure.Repositories.Scripts.Passports {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT EXISTS(SELECT id
+        ///              FROM passports
+        ///              WHERE number = @number).
+        /// </summary>
+        internal static string IsPassportExistByNumber {
+            get {
+                return ResourceManager.GetString("IsPassportExistByNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to UPDATE passports
         ///SET type = @type,
         ///    number = @number,

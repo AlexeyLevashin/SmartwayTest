@@ -1,4 +1,4 @@
-﻿using Application.Dto.Department.Requests;
+﻿using Application.Dto.Departments.Requests;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,5 +34,11 @@ public class DepartmentController : ControllerBase
     {
         var result = await _departmentService.GetByIdAsync(id);
         return Ok(result);
+    }
+    
+    [HttpGet("{id}/employees")]
+    public async Task<IActionResult> GetEmployees(int id)
+    {
+        return Ok(await _departmentService.GetEmployeesByDepartmentIdAsync(id));
     }
 }

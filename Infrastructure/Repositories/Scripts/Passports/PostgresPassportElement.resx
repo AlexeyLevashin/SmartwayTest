@@ -24,6 +24,9 @@
     <data name="GetPassportByEmployeeId" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>GetPassportByEmployeeId.sql;System.String, mscorlib, Version=4.0.0.0, PublicKeyToken=b77a5c561934e089;utf-8</value>
     </data>
+    <data name="IsPassportExistByNumber" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>IsPassportExistByNumber.sql;System.String, mscorlib, Version=4.0.0.0, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    </data>
     <data name="UpdatePassport" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>UpdatePassport.sql;System.String, mscorlib, Version=4.0.0.0, PublicKeyToken=b77a5c561934e089;utf-8</value>
     </data>

@@ -14,6 +14,7 @@ public class DapperContext(IDapperSettings dapperSettings) : IDapperContext, IDi
     public void BeginTransaction()
     {
         _connection = new NpgsqlConnection(dapperSettings.ConnectionString);
+        
         if (_connection.State != ConnectionState.Open)
         {
             _connection.Open();

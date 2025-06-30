@@ -14,10 +14,25 @@ public class EmployeeRepository : IEmployeeRepository
     {
         _dapperContext = dapperContext;
     }
+    
+    public void BeginTransaction()
+    {
+        _dapperContext.BeginTransaction();
+    }
 
+    public void Commit()
+    {
+        _dapperContext.Commit();
+    }
+
+    public void Rollback()
+    {
+        _dapperContext.Rollback();
+    }
+    
     public async Task<int> CreateAsync(DbEmployee employee)
     {
-        var employeeQuery = new QueryObject(PostgresEmployeeElement.CreateEmployee, new
+        var queryObject = new QueryObject(PostgresEmployeeElement.CreateEmployee, new
         {
             name = employee.Name,
             surname = employee.Surname,
@@ -26,7 +41,7 @@ public class EmployeeRepository : IEmployeeRepository
             departmentId = employee.DepartmentId
         });
             
-        var employeeId = await _dapperContext.CommandWithResponse<int>(employeeQuery);
+        var employeeId = await _dapperContext.CommandWithResponse<int>(queryObject);
         return employeeId;
     }
     
@@ -75,11 +90,18 @@ public class EmployeeRepository : IEmployeeRepository
         return await _dapperContext.FirstOrDefault<DbEmployee>(queryObject);
     }
 
-    public async Task<List<DbEmployeeDetails>> GetEmployeesByCompanyIdAsync(int companyId)
+    public async Task<List<DbEmployeeDetails>?> GetEmployeesByCompanyIdAsync(int companyId)
     {
         var queryObject = new QueryObject(PostgresEmployeeElement.GetCompanyEmployees, new { companyId = companyId });
         var res = await _dapperContext.ListOrEmpty<DbEmployeeDetails>(queryObject);
         
         return res;
+    }
+    
+    public async Task<List<DbEmployeePassport>> GetEmployeesByDepartmentIdAsync(int departmentId)
+    {
+        var queryObject = new QueryObject(PostgresEmployeeElement.GetDepartmentEmployees, new { departmentId = departmentId });
+        
+        return await _dapperContext.ListOrEmpty<DbEmployeePassport>(queryObject);
     }
 }

@@ -1,5 +1,6 @@
-﻿using Application.Dto.Department.Requests;
-using Application.Dto.Department.Responses;
+﻿using Application.Dto.Departments.Requests;
+using Application.Dto.Departments.Responses;
+using Application.Dto.Employees.Responses;
 using Application.Exceptions.Departments;
 using Application.Interfaces;
 using Domain.DbModels;
@@ -11,10 +12,12 @@ namespace Application.Services;
 public class DepartmentService : IDepartmentService
 {
     private readonly IDepartmentRepository _departmentRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public DepartmentService(IDepartmentRepository departmentRepository)
+    public DepartmentService(IDepartmentRepository departmentRepository, IEmployeeRepository employeeRepository)
     {
         _departmentRepository = departmentRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public async Task<GetDepartmentResponse> CreateAsync(CreateDepartmentRequest department)
@@ -43,5 +46,16 @@ public class DepartmentService : IDepartmentService
         }
 
         return res.Adapt<GetDepartmentResponse>();
+    }
+
+    public async Task<List<GetEmployeeWithPassportResponse>> GetEmployeesByDepartmentIdAsync(int id)
+    {
+        if (await _departmentRepository.GetByIdAsync(id) is null)
+        {
+            throw new DepartmentNotFound();
+        }
+        
+        var res = await _employeeRepository.GetEmployeesByDepartmentIdAsync(id);
+        return res.Select(e => e.Adapt<GetEmployeeWithPassportResponse>()).ToList();
     }
 }

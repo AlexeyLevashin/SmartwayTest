@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Repositories\Scripts\Department\PostgresDepartmentElement.resx">
+      <EmbeddedResource Update="Repositories\Scripts\Departments\PostgresDepartmentElement.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>PostgresDepartmentElement.Designer.cs</LastGenOutput>
       </EmbeddedResource>
@@ -32,10 +32,14 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>PostgresPassportElement.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Repositories\Scripts\Departments\PostgresDepartmentElement.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PostgresDepartmentElement.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Repositories\Scripts\Department\PostgresDepartmentElement.Designer.cs">
+      <Compile Update="Repositories\Scripts\Departments\PostgresDepartmentElement.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>PostgresDepartmentElement.resx</DependentUpon>
@@ -49,6 +53,11 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>PostgresPassportElement.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Repositories\Scripts\Departments\PostgresDepartmentElement.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PostgresDepartmentElement.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

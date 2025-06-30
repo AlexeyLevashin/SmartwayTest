@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Infrastructure.Repositories.Scripts.Department {
+namespace Infrastructure.Repositories.Scripts.Departments {
     using System;
     
     
@@ -38,7 +38,7 @@ namespace Infrastructure.Repositories.Scripts.Department {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Infrastructure.Repositories.Scripts.Department.PostgresDepartmentElement", typeof(PostgresDepartmentElement).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Infrastructure.Repositories.Scripts.Departments.PostgresDepartmentElement", typeof(PostgresDepartmentElement).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -87,7 +87,13 @@ namespace Infrastructure.Repositories.Scripts.Department {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to SELECT
+        ///    id AS &quot;Id&quot;,
+        ///    name AS &quot;Name&quot;,
+        ///    phone AS &quot;Phone&quot;
+        ///FROM departments
+        ///WHERE id = @id;
+        ///.
         /// </summary>
         internal static string GetDepartmentById {
             get {

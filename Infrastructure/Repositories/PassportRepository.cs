@@ -17,11 +17,14 @@ public class PassportRepository : IPassportRepository
 
     public async Task<int> CreateAsync(DbPassport dbPassport)
     {
-        var passportQuery = new QueryObject(
-            PostgresPassportElement.CreatePassport,
-            new { type = dbPassport.Type, number = dbPassport.Number, employeeId = dbPassport.EmployeeId });
+        var queryObject = new QueryObject(PostgresPassportElement.CreatePassport, new
+        {
+            type = dbPassport.Type,
+            number = dbPassport.Number,
+            employeeId = dbPassport.EmployeeId
+        });
 
-        return await _dapperContext.CommandWithResponse<int>(passportQuery);
+        return await _dapperContext.CommandWithResponse<int>(queryObject);
     }
 
     public async Task<DbPassport> UpdateByEmployeeIdAsync(DbPassport dbPassport)
@@ -44,5 +47,15 @@ public class PassportRepository : IPassportRepository
         });
         
         return await _dapperContext.FirstOrDefault<DbPassport>(queryObject);
+    }
+    
+    public async Task<bool> IsPassportExistByNumber(string number)
+    {
+        var queryObject = new QueryObject(PostgresPassportElement.IsPassportExistByNumber, new
+        {
+            number
+        });
+        
+        return await _dapperContext.CommandWithResponse<bool>(queryObject);
     }
 }

@@ -1,8 +1,8 @@
-﻿using Application.Dto.Department.Responses;
-using Application.Dto.Employee.Requests;
-using Application.Dto.Employee.Responses;
-using Application.Dto.Passport.Requests;
-using Application.Dto.Passport.Responses;
+﻿using Application.Dto.Departments.Responses;
+using Application.Dto.Employees.Requests;
+using Application.Dto.Employees.Responses;
+using Application.Dto.Passports.Requests;
+using Application.Dto.Passports.Responses;
 using Application.Interfaces;
 using Application.Services;
 using Domain.DbModels;
@@ -15,7 +15,7 @@ public static class ApplicationExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        // services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IDepartmentService, DepartmentService>();
         return services;
     }

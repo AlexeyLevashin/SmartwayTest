@@ -1,4 +1,4 @@
-﻿namespace Application.Dto.Passport.Responses;
+﻿namespace Application.Dto.Passports.Responses;
 
 public class GetPassportResponse
 {

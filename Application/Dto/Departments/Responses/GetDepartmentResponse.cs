@@ -1,4 +1,4 @@
-﻿namespace Application.Dto.Department.Responses;
+﻿namespace Application.Dto.Departments.Responses;
 
 public class GetDepartmentResponse
 {

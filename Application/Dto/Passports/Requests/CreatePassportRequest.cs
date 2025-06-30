@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Application.Dto.Passport.Requests;
+namespace Application.Dto.Passports.Requests;
 
 public class CreatePassportRequest
 {

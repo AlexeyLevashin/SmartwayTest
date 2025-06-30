@@ -1,7 +1,7 @@
-﻿using Application.Dto.Department.Responses;
-using Application.Dto.Passport.Responses;
+﻿using Application.Dto.Departments.Responses;
+using Application.Dto.Passports.Responses;
 
-namespace Application.Dto.Employee.Responses;
+namespace Application.Dto.Employees.Responses;
 
 public class GetEmployeeResponse
 {
@@ -12,4 +12,4 @@ public class GetEmployeeResponse
     public int CompanyId { get; set; }
     public GetPassportResponse Passport { get; set; }
     public GetEmployeeDepartmentResponse Department { get; set; }
-}
+}   

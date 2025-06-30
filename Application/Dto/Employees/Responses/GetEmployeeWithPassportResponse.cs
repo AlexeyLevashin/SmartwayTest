@@ -1,6 +1,6 @@
-﻿using Application.Dto.Passport.Responses;
+﻿using Application.Dto.Passports.Responses;
 
-namespace Application.Dto.Employee.Responses;
+namespace Application.Dto.Employees.Responses;
 
 public class GetEmployeeWithPassportResponse
 {

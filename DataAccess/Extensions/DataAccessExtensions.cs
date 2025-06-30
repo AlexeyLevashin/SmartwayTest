@@ -10,7 +10,7 @@ public static class DataAccessExtensions
 {
     public static IServiceCollection AddDapperContext(this IServiceCollection services)
     {
-        services.AddScoped<IDapperSettings, DapperSettings>();
+        services.AddSingleton<IDapperSettings, DapperSettings>();
         services.AddScoped<IDapperContext, DapperContext>();
         return services;
     }
