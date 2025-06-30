@@ -2,7 +2,6 @@
 using Application.Dto.Employees.Requests;
 using Application.Dto.Employees.Responses;
 using Application.Dto.Passports.Responses;
-using Application.Exceptions.Companies;
 using Application.Exceptions.Departments;
 using Application.Exceptions.Employees;
 using Application.Exceptions.Passports;
@@ -127,22 +126,30 @@ public class EmployeeService : IEmployeeService
             var updatedDbPassport = await _passportRepository.UpdateByEmployeeIdAsync(passportForUpdate);
     
             _employeeRepository.Commit();
-            
-            return new GetEmployeeResponse
-            {
-                Id = updatedDbEmployee.Id,
-                Name = updatedDbEmployee.Name,
-                Surname = updatedDbEmployee.Surname,
-                Phone = updatedDbEmployee.Phone,
-                Passport = updatedDbPassport.Adapt<GetPassportResponse>(),
-                Department = dbDepartment.Adapt<GetEmployeeDepartmentResponse>()
-            };
         }
         catch
         {
             _employeeRepository.Rollback();
             throw;
         }
+
+        return new GetEmployeeResponse
+        {
+            Id = employeeForUpdate.Id,
+            Name = employeeForUpdate.Name,
+            Surname = employeeForUpdate.Surname,
+            Phone = employeeForUpdate.Phone,
+            Passport = new GetPassportResponse
+            {
+                Number = passportForUpdate.Number,
+                Type = passportForUpdate.Type
+            },
+            Department = new GetEmployeeDepartmentResponse
+            {
+                Name = dbDepartment.Name,
+                Phone = dbDepartment.Phone
+            }
+        };
     }
 
     public async Task<List<GetEmployeeResponse>> GetCompanyEmployeesAsync(int companyId)
