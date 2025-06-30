@@ -143,7 +143,7 @@ public class EmployeeService : IEmployeeService
     {
         var employees = await _employeeRepository.GetEmployeesByCompanyIdAsync(companyId);
         
-        if (employees is null)
+        if (employees is null || employees.Count == 0)
         {
             throw new CompanyNotFound();
         }
